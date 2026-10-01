@@ -8,6 +8,7 @@
   <meta name="theme-color" content="#f3efe7">
   <link rel="icon" href="favicon.svg" type="image/svg+xml">
   <link rel="stylesheet" href="css/styles.css">
+  <script>document.documentElement.classList.add("js")</script>
   <meta property="og:title" content="Michelle Lindberg · Biological Engineering">
   <meta property="og:description" content="University of Georgia. Veterinary laboratory experience in Valencia, a business minor, and a one-page résumé for applications.">
   <meta property="og:type" content="profile">
@@ -49,6 +50,19 @@
     </ul>
   </header>
 
+  <div class="nowbar">
+    <div class="lens" role="radiogroup" aria-label="Read this page for">
+      <span class="lens-kicker">Read for</span>
+      <button type="button" role="radio" aria-checked="true" data-lens-btn="all">All</button>
+      <button type="button" role="radio" aria-checked="false" data-lens-btn="lab">Lab</button>
+      <button type="button" role="radio" aria-checked="false" data-lens-btn="engineering">Engineering</button>
+      <button type="button" role="radio" aria-checked="false" data-lens-btn="business">Business</button>
+    </div>
+    <p class="now-facts">Biological Engineering · GPA 3.4 · Open to internships</p>
+    <a class="now-pdf" href="Michelle_Lindberg_Resume.pdf" download>Résumé</a>
+  </div>
+  <p class="lens-note wrap" id="lens-note">The full record, in one reading.</p>
+
   <main id="content">
     <div class="hero wrap" id="top">
       <div class="hero-grid">
@@ -85,13 +99,36 @@
       </div>
     </div>
 
-    <section class="band" aria-label="Recent laboratory work">
+    <section class="band" data-for="lab" aria-label="Recent laboratory work">
       <div class="wrap band-inner">
         <p class="eyebrow">Summer 2026</p>
         <div>
           <h2>A veterinary laboratory in Valencia.</h2>
           <p>I assisted with testing of blood, urine, and other animal specimens, and I worked in Spanish with the people running the clinic.</p>
         </div>
+      </div>
+    </section>
+
+    <section class="route" aria-label="Places on the record">
+      <div class="wrap">
+        <p class="eyebrow">The route</p>
+        <div class="route-track">
+          <span class="route-rail" aria-hidden="true"><span class="route-fill" id="route-fill"></span></span>
+          <button type="button" class="stop" data-stop="cincinnati" data-for="business" aria-pressed="false">
+            <span class="dot" aria-hidden="true"></span>
+            Cincinnati
+          </button>
+          <button type="button" class="stop" data-stop="athens" data-for="engineering business" aria-pressed="false">
+            <span class="dot" aria-hidden="true"></span>
+            Athens
+          </button>
+          <button type="button" class="stop is-on" data-stop="valencia" data-for="lab" aria-pressed="true">
+            <span class="dot" aria-hidden="true"></span>
+            Valencia
+          </button>
+        </div>
+        <p class="route-kicker" id="route-kicker">Valencia, Spain</p>
+        <p class="route-copy" id="route-copy">June and July 2026. Veterinary laboratory intern at Sagunto 99: specimens, procedures, and a clinic that worked in Spanish.</p>
       </div>
     </section>
 
@@ -103,67 +140,131 @@
           <p class="lede">Laboratory work first. Then the roles that built communication, reliability, and pace.</p>
         </div>
 
-        <article class="role reveal" style="--d: 0.04s">
-          <div class="when">
-            <p class="year">2026</p>
-            <span class="range">Jun – Jul</span>
-          </div>
-          <div>
-            <h3>International Veterinary Laboratory Intern</h3>
-            <p class="place">Sagunto 99 · Valencia, Spain</p>
-            <ul>
+        <article class="role reveal" data-for="lab" style="--d: 0.04s">
+          <h3 class="sr-only">International Veterinary Laboratory Intern</h3>
+          <button class="role-toggle" type="button" aria-expanded="false">
+            <span class="when">
+              <span class="year">2026</span>
+              <span class="range">Jun – Jul</span>
+            </span>
+            <span class="role-heading">
+              <span class="role-title">International Veterinary Laboratory Intern</span>
+              <span class="place">Sagunto 99 · Valencia, Spain</span>
+            </span>
+            <span class="open-cue"><span class="when-closed">Open</span><span class="when-open">Close</span></span>
+          </button>
+          <div class="role-panel">
+            <ul class="role-facts">
               <li>Assisted with laboratory testing of blood, urine, and other animal specimens in a veterinary clinic.</li>
               <li>Followed procedures for specimen handling, testing methods, and workplace safety.</li>
               <li>Communicated with supervisors and coworkers in a primarily Spanish-speaking environment.</li>
               <li>Adapted to unfamiliar expectations while staying professional, flexible, and willing to take initiative.</li>
             </ul>
+            <div class="beats" role="tablist" aria-label="Valencia, in three beats">
+              <button type="button" role="tab" aria-selected="true">Specimens</button>
+              <button type="button" role="tab" aria-selected="false">Procedures</button>
+              <button type="button" role="tab" aria-selected="false">In Spanish</button>
+            </div>
+            <div class="beat-copies">
+              <p>Assisted with laboratory testing of blood, urine, and other animal specimens in a veterinary clinic.</p>
+              <p hidden>Followed procedures for specimen handling, testing methods, and workplace safety.</p>
+              <p hidden>Worked with supervisors and coworkers in a primarily Spanish-speaking clinic, and adapted to unfamiliar expectations.</p>
+            </div>
           </div>
         </article>
 
-        <article class="role reveal" style="--d: 0.08s">
-          <div class="when">
-            <p class="year">2020</p>
-            <span class="range">to present</span>
-          </div>
-          <div>
-            <h3>Social Media Marketing Executive</h3>
-            <p class="place">Dial One Security · Cincinnati, Ohio</p>
-            <ul>
+        <article class="role reveal" data-for="business" style="--d: 0.08s">
+          <h3 class="sr-only">Social Media Marketing Executive</h3>
+          <button class="role-toggle" type="button" aria-expanded="false">
+            <span class="when">
+              <span class="year">2020</span>
+              <span class="range">to present</span>
+            </span>
+            <span class="role-heading">
+              <span class="role-title">Social Media Marketing Executive</span>
+              <span class="place">Dial One Security · Cincinnati, Ohio</span>
+            </span>
+            <span class="open-cue"><span class="when-closed">Open</span><span class="when-open">Close</span></span>
+          </button>
+          <div class="role-panel">
+            <ul class="role-facts">
               <li>Collaborated with internal teams on content aligned with the brand.</li>
               <li>Managed daily posts across platforms and checked shared information for accuracy.</li>
               <li>Developed and ran social campaigns to support awareness, engagement, and website traffic.</li>
             </ul>
+            <div class="beats" role="tablist" aria-label="Dial One, in three beats">
+              <button type="button" role="tab" aria-selected="true">Brand</button>
+              <button type="button" role="tab" aria-selected="false">Daily posts</button>
+              <button type="button" role="tab" aria-selected="false">Campaigns</button>
+            </div>
+            <div class="beat-copies">
+              <p>Collaborated with internal teams on content aligned with the brand.</p>
+              <p hidden>Managed daily posts across platforms and checked shared information for accuracy.</p>
+              <p hidden>Developed and ran social campaigns for awareness, engagement, and website traffic.</p>
+            </div>
           </div>
         </article>
 
         <article class="role reveal" style="--d: 0.12s">
-          <div class="when">
-            <p class="year">2023</p>
-            <span class="range">Aug – Dec</span>
-          </div>
-          <div>
-            <h3>Intern</h3>
-            <p class="place">Kenwood Complete Dentistry · Cincinnati, Ohio</p>
-            <ul>
+          <h3 class="sr-only">Kenwood Complete Dentistry intern</h3>
+          <button class="role-toggle" type="button" aria-expanded="false">
+            <span class="when">
+              <span class="year">2023</span>
+              <span class="range">Aug – Dec</span>
+            </span>
+            <span class="role-heading">
+              <span class="role-title">Intern</span>
+              <span class="place">Kenwood Complete Dentistry · Cincinnati, Ohio</span>
+            </span>
+            <span class="open-cue"><span class="when-closed">Open</span><span class="when-open">Close</span></span>
+          </button>
+          <div class="role-panel">
+            <ul class="role-facts">
               <li>Learned the procedures and systems used in a dental practice.</li>
               <li>Completed overlapping tasks, building organization and time management.</li>
               <li>Took initiative and worked independently on assigned projects.</li>
             </ul>
+            <div class="beats" role="tablist" aria-label="Kenwood, in three beats">
+              <button type="button" role="tab" aria-selected="true">The office</button>
+              <button type="button" role="tab" aria-selected="false">The pace</button>
+              <button type="button" role="tab" aria-selected="false">Initiative</button>
+            </div>
+            <div class="beat-copies">
+              <p>Learned the procedures and systems used in a dental practice.</p>
+              <p hidden>Completed overlapping tasks, building organization and time management.</p>
+              <p hidden>Took initiative and worked independently on assigned projects.</p>
+            </div>
           </div>
         </article>
 
         <article class="role reveal" style="--d: 0.16s">
-          <div class="when">
-            <p class="year">2021</p>
-            <span class="range">May – Aug 2022</span>
-          </div>
-          <div>
-            <h3>Employee</h3>
-            <p class="place">Camargo Trading · Cincinnati, Ohio</p>
-            <ul>
+          <h3 class="sr-only">Camargo Trading</h3>
+          <button class="role-toggle" type="button" aria-expanded="false">
+            <span class="when">
+              <span class="year">2021</span>
+              <span class="range">May – Aug 2022</span>
+            </span>
+            <span class="role-heading">
+              <span class="role-title">Employee</span>
+              <span class="place">Camargo Trading · Cincinnati, Ohio</span>
+            </span>
+            <span class="open-cue"><span class="when-closed">Open</span><span class="when-open">Close</span></span>
+          </button>
+          <div class="role-panel">
+            <ul class="role-facts">
               <li>Worked with coworkers to complete assigned tasks.</li>
               <li>Responded quickly to customer needs and helped resolve problems.</li>
             </ul>
+            <div class="beats" role="tablist" aria-label="Camargo, in three beats">
+              <button type="button" role="tab" aria-selected="true">The team</button>
+              <button type="button" role="tab" aria-selected="false">Customers</button>
+              <button type="button" role="tab" aria-selected="false">Problems</button>
+            </div>
+            <div class="beat-copies">
+              <p>Worked with coworkers to complete assigned tasks.</p>
+              <p hidden>Responded quickly to customer needs.</p>
+              <p hidden>Helped resolve problems as they came up.</p>
+            </div>
           </div>
         </article>
       </div>
@@ -177,7 +278,7 @@
           <p class="lede">The program I’m in now, and the high school record behind it.</p>
         </div>
         <div class="schools">
-          <article class="school reveal">
+          <article class="school reveal" data-for="engineering business">
             <div>
               <h3>University of Georgia</h3>
               <p class="where">Athens, Georgia</p>
@@ -247,7 +348,7 @@
               <span>of the Year</span>
             </a>
           </li>
-          <li class="reveal" style="--d: 0.08s">
+          <li class="reveal" data-for="business" style="--d: 0.08s">
             <a href="https://www.deca.org/" target="_blank" rel="noreferrer noopener">
               <span class="mark"><img src="logos/deca.svg" alt="DECA"></span>
               <strong>DECA</strong>
