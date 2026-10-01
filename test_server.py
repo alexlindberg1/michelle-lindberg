@@ -85,6 +85,21 @@ class TrackerTests(unittest.TestCase):
 
         rows = self.ledger.read()
         self.assertEqual(rows[0]["company"], "Rivian")
+        self.assertEqual(rows[0]["interest"], 0)
+        starred = self.client.post(
+            PATH + "/applications/" + rows[0]["id"] + "/interest",
+            data={"csrf": token, "interest": "4"},
+            follow_redirects=True,
+        )
+        self.assertEqual(starred.get_data(as_text=True).count("is-on"), 4)
+        self.assertEqual(self.ledger.read()[0]["interest"], 4)
+        cleared = self.client.post(
+            PATH + "/applications/" + rows[0]["id"] + "/interest",
+            data={"csrf": token, "interest": "4"},
+            follow_redirects=True,
+        )
+        self.assertEqual(cleared.get_data(as_text=True).count("is-on"), 0)
+        self.assertEqual(self.ledger.read()[0]["interest"], 0)
         edit = self.client.get(PATH + "/applications/" + rows[0]["id"])
         self.assertIn("Edit Rivian", edit.get_data(as_text=True))
 

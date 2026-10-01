@@ -201,15 +201,16 @@ table {
   min-width: 980px;
 }
 
-.c-company { width: 15%; }
-.c-role { width: 13%; }
-.c-site { width: 16%; }
-.c-location { width: 12%; }
-.c-status { width: 11%; }
-.c-date { width: 9%; }
-.c-contact { width: 12%; }
-.c-notes { width: 14%; }
-.c-edit { width: 8%; }
+.c-company { width: 13%; }
+.c-interest { width: 12%; }
+.c-role { width: 11%; }
+.c-site { width: 13%; }
+.c-location { width: 9%; }
+.c-status { width: 9%; }
+.c-date { width: 8%; }
+.c-contact { width: 8%; }
+.c-notes { width: 8%; }
+.c-edit { width: 6%; }
 
 caption, .sr {
   position: absolute;
@@ -221,10 +222,11 @@ caption, .sr {
 
 th, td {
   text-align: left;
-  vertical-align: top;
+  vertical-align: middle;
   padding: 11px 12px;
   border-bottom: 1px solid var(--line);
   font-size: 0.98rem;
+  overflow: hidden;
 }
 
 th:first-child,
@@ -239,12 +241,14 @@ td a { color: var(--green); }
 
 td.site a {
   display: inline-block;
-  max-width: 220px;
+  max-width: 100%;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
   vertical-align: bottom;
 }
+
+td.interest { overflow: visible; }
 
 dialog {
   width: min(680px, calc(100% - 32px));
@@ -273,6 +277,35 @@ dialog::backdrop {
 .notes {
   max-width: 220px;
   white-space: pre-wrap;
+}
+
+.stars {
+  display: flex;
+  align-items: center;
+  gap: 0;
+  margin: 0;
+}
+
+.stars button,
+.stars button:hover {
+  width: 22px;
+  height: 28px;
+  min-height: 0;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: #c4bdb2;
+  font-size: 18px;
+  line-height: 1;
+  letter-spacing: 0;
+  text-transform: none;
+}
+
+.stars button.is-on,
+.stars button.is-on:hover {
+  color: #1b4334;
+  background: transparent;
 }
 
 .empty { color: var(--muted); padding-top: 14px; padding-bottom: 14px; }

@@ -117,6 +117,15 @@ def create_app(settings=None):
         if website and urlparse(website).scheme not in ("http", "https"):
             raise ValueError("Website must be an http or https link.")
         now = datetime.now(timezone.utc).replace(microsecond=0).isoformat()
+        raw_interest = form.get("interest")
+        if raw_interest is None or raw_interest == "":
+            raw_interest = (existing or {}).get("interest", 0)
+        try:
+            interest = int(raw_interest)
+        except (TypeError, ValueError):
+            raise ValueError("Interest must be from 0 to 5.")
+        if interest < 0 or interest > 5:
+            raise ValueError("Interest must be from 0 to 5.")
         item = {
             "id": (existing or {}).get("id") or secrets.token_hex(8),
             "company": company[: LIMITS["company"]],
@@ -124,6 +133,7 @@ def create_app(settings=None):
             "website": website[: LIMITS["website"]],
             "location": (form.get("location") or "").strip()[: LIMITS["location"]],
             "status": status,
+            "interest": interest,
             "applied_on": (form.get("applied_on") or "").strip()[:10],
             "deadline": (form.get("deadline") or "").strip()[:10],
             "contact": (form.get("contact") or "").strip()[: LIMITS["contact"]],
@@ -140,6 +150,7 @@ def create_app(settings=None):
             "website": "",
             "location": "",
             "status": "To apply",
+            "interest": 0,
             "applied_on": "",
             "deadline": "",
             "contact": "",
@@ -238,6 +249,35 @@ def create_app(settings=None):
 
             app.config["LEDGER"].update(mutate)
             flash(f"Updated {item['company']}.")
+            return redirect(prefix)
+
+        @app.post(prefix + "/applications/<application_id>/interest")
+        def set_interest(application_id):
+            require_login()
+            if not csrf_ok():
+                abort(400)
+            existing = find_row(application_id)
+            if not existing:
+                abort(404)
+            try:
+                chosen = int(request.form.get("interest", ""))
+            except (TypeError, ValueError):
+                abort(400)
+            if chosen < 1 or chosen > 5:
+                abort(400)
+            current = int(existing.get("interest") or 0)
+            new_value = 0 if current == chosen else chosen
+            now = datetime.now(timezone.utc).replace(microsecond=0).isoformat()
+
+            def mutate(rows):
+                updated = []
+                for row in rows:
+                    if row.get("id") == application_id:
+                        row = {**row, "interest": new_value, "updated_at": now}
+                    updated.append(row)
+                return updated
+
+            app.config["LEDGER"].update(mutate)
             return redirect(prefix)
 
         @app.post(prefix + "/applications/<application_id>/delete")

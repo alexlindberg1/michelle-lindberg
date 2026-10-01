@@ -33,6 +33,7 @@
     <caption>Internship applications</caption>
     <colgroup>
       <col class="c-company">
+      <col class="c-interest">
       <col class="c-role">
       <col class="c-site">
       <col class="c-location">
@@ -46,6 +47,7 @@
     <thead>
       <tr>
         <th>Company</th>
+        <th>Interest</th>
         <th>Role</th>
         <th>Website</th>
         <th>Location</th>
@@ -62,6 +64,15 @@
       {% for row in rows %}
       <tr>
         <td>{{ row.company }}</td>
+        <td class="interest">
+          {% set score = row.interest|default(0)|int %}
+          <form class="stars" method="post" action="{{ path }}/applications/{{ row.id }}/interest" aria-label="Interest in {{ row.company }}">
+            <input type="hidden" name="csrf" value="{{ csrf }}">
+            {% for n in [1, 2, 3, 4, 5] %}
+            <button type="submit" name="interest" value="{{ n }}" class="{% if score >= n %}is-on{% endif %}" aria-label="{{ n }} of 5 for {{ row.company }}" {% if score == n %}aria-pressed="true"{% else %}aria-pressed="false"{% endif %}>{% if score >= n %}★{% else %}☆{% endif %}</button>
+            {% endfor %}
+          </form>
+        </td>
         <td>{{ row.role }}</td>
         <td class="site">
           {% if row.website %}
@@ -79,7 +90,7 @@
       {% endfor %}
       {% else %}
       <tr>
-        <td class="empty" colspan="10">No applications in this view yet.</td>
+        <td class="empty" colspan="11">No applications in this view yet.</td>
       </tr>
       {% endif %}
     </tbody>
