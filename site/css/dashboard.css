@@ -23,7 +23,7 @@ body {
 }
 
 .sheet, .signin {
-  width: min(1180px, calc(100% - 32px));
+  width: min(1440px, calc(100% - 40px));
   margin: 0 auto;
   padding: 28px 0 64px;
 }
@@ -56,9 +56,15 @@ h2 { font-size: 1.7rem; margin-bottom: 16px; }
 .top {
   display: flex;
   justify-content: space-between;
-  align-items: end;
+  align-items: flex-start;
   gap: 16px;
-  margin-bottom: 18px;
+  margin-bottom: 22px;
+}
+
+.top-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
 }
 
 .summary { color: var(--muted); margin: 0 0 14px; }
@@ -83,6 +89,11 @@ h2 { font-size: 1.7rem; margin-bottom: 16px; }
 }
 
 .search, .fields, form { margin: 0; }
+
+.top-actions form,
+.modal-head button { margin: 0; }
+
+#open-add { margin-top: 0; }
 
 .search {
   display: flex;
@@ -160,7 +171,7 @@ button.quiet {
 table {
   width: 100%;
   border-collapse: collapse;
-  min-width: 920px;
+  min-width: 1080px;
 }
 
 caption, .sr {
@@ -174,14 +185,47 @@ caption, .sr {
 th, td {
   text-align: left;
   vertical-align: top;
-  padding: 10px 10px 10px 0;
+  padding: 14px 16px 14px 0;
   border-bottom: 1px solid var(--line);
-  font-size: 0.98rem;
+  font-size: 1.02rem;
 }
 
 th { color: var(--muted); font-weight: 400; }
 
 td a { color: var(--green); }
+
+td.site a {
+  display: inline-block;
+  max-width: 220px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  vertical-align: bottom;
+}
+
+dialog {
+  width: min(680px, calc(100% - 32px));
+  max-height: calc(100vh - 32px);
+  overflow: auto;
+  padding: 28px 28px 24px;
+  border: 1px solid var(--line);
+  background: var(--paper);
+  color: var(--ink);
+}
+
+dialog::backdrop {
+  background: rgba(28, 25, 21, 0.46);
+}
+
+.modal-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 18px;
+}
+
+.modal-head h2 { margin: 0; }
 
 .notes {
   max-width: 220px;

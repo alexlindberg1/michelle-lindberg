@@ -5,14 +5,16 @@
   <div>
     <p class="eyebrow">Unlisted</p>
     <h1>Applications</h1>
+    <p class="summary" id="summary">{{ summary }}</p>
   </div>
-  <form method="post" action="{{ path }}/logout">
-    <input type="hidden" name="csrf" value="{{ csrf }}">
-    <button type="submit" class="quiet">Log out</button>
-  </form>
+  <div class="top-actions">
+    <form method="post" action="{{ path }}/logout">
+      <input type="hidden" name="csrf" value="{{ csrf }}">
+      <button type="submit" class="quiet">Log out</button>
+    </form>
+    <button type="button" id="open-add">Add application</button>
+  </div>
 </header>
-
-<p class="summary" id="summary">{{ summary }}</p>
 
 <nav class="filters" aria-label="Filter by status">
   <a href="{{ path }}" {% if not status_filter %}aria-current="true"{% endif %}>All</a>
@@ -21,72 +23,78 @@
   {% endfor %}
 </nav>
 
-<form class="search" method="get" action="{{ path }}">
-  {% if status_filter %}<input type="hidden" name="status" value="{{ status_filter }}">{% endif %}
-  <label for="q">Search</label>
-  <input id="q" name="q" value="{{ query }}" placeholder="Company, role, notes">
-  <button type="submit">Search</button>
-</form>
-
 {% with messages = get_flashed_messages() %}
 {% if messages %}
 <p class="flash" role="status">{{ messages[0] }}</p>
 {% endif %}
 {% endwith %}
 
-<section class="panel" aria-labelledby="add-heading">
-  <h2 id="add-heading">Add an application</h2>
+<div class="table-wrap">
+  <table>
+    <caption>Internship applications</caption>
+    <thead>
+      <tr>
+        <th>Company</th>
+        <th>Role</th>
+        <th>Website</th>
+        <th>Location</th>
+        <th>Status</th>
+        <th>Applied</th>
+        <th>Deadline</th>
+        <th>Contact</th>
+        <th>Notes</th>
+        <th><span class="sr">Edit</span></th>
+      </tr>
+    </thead>
+    <tbody>
+      {% if rows %}
+      {% for row in rows %}
+      <tr>
+        <td>{{ row.company }}</td>
+        <td>{{ row.role }}</td>
+        <td class="site">
+          {% if row.website %}
+          <a href="{{ row.website }}" rel="noreferrer noopener" target="_blank">{{ row.website }}</a>
+          {% endif %}
+        </td>
+        <td>{{ row.location }}</td>
+        <td>{{ row.status }}</td>
+        <td>{{ row.applied_on }}</td>
+        <td>{{ row.deadline }}</td>
+        <td>{{ row.contact }}</td>
+        <td class="notes">{{ row.notes[:140] }}{% if row.notes|length > 140 %}…{% endif %}</td>
+        <td><a href="{{ path }}/applications/{{ row.id }}">Edit {{ row.company }}</a></td>
+      </tr>
+      {% endfor %}
+      {% else %}
+      <tr>
+        <td class="empty" colspan="10">No applications in this view yet.</td>
+      </tr>
+      {% endif %}
+    </tbody>
+  </table>
+</div>
+
+<dialog id="add-dialog" {% if error %}open{% endif %}>
   <form method="post" action="{{ path }}/applications">
+    <div class="modal-head">
+      <h2 id="add-heading">Add an application</h2>
+      <button type="button" class="quiet" id="close-add">Cancel</button>
+    </div>
     {% set item = draft %}
     {% include "form.html" %}
     <button type="submit">Save application</button>
   </form>
-</section>
+</dialog>
 
-<section class="panel" aria-labelledby="list-heading">
-  <h2 id="list-heading">Saved</h2>
-  {% if rows %}
-  <div class="table-wrap">
-    <table>
-      <caption>Internship applications</caption>
-      <thead>
-        <tr>
-          <th>Company</th>
-          <th>Role</th>
-          <th>Website</th>
-          <th>Location</th>
-          <th>Status</th>
-          <th>Applied</th>
-          <th>Deadline</th>
-          <th>Contact</th>
-          <th>Notes</th>
-          <th><span class="sr">Edit</span></th>
-        </tr>
-      </thead>
-      <tbody>
-        {% for row in rows %}
-        <tr>
-          <td>{{ row.company }}</td>
-          <td>{{ row.role }}</td>
-          <td>
-            {% if row.website %}
-            <a href="{{ row.website }}" rel="noreferrer noopener" target="_blank">{{ row.website }}</a>
-            {% endif %}
-          </td>
-          <td>{{ row.location }}</td>
-          <td>{{ row.status }}</td>
-          <td>{{ row.applied_on }}</td>
-          <td>{{ row.deadline }}</td>
-          <td>{{ row.contact }}</td>
-          <td class="notes">{{ row.notes[:140] }}{% if row.notes|length > 140 %}…{% endif %}</td>
-          <td><a href="{{ path }}/applications/{{ row.id }}">Edit {{ row.company }}</a></td>
-        </tr>
-        {% endfor %}
-      </tbody>
-    </table>
-  </div>
-  {% else %}
-  <p class="empty">No applications in this view yet.</p>
-  {% endif %}
-</section>
+<script>
+  const addDialog = document.getElementById("add-dialog");
+  document.getElementById("open-add").addEventListener("click", () => addDialog.showModal());
+  document.getElementById("close-add").addEventListener("click", () => addDialog.close());
+  addDialog.addEventListener("click", (event) => {
+    const box = addDialog.getBoundingClientRect();
+    const inside = event.clientX >= box.left && event.clientX <= box.right && event.clientY >= box.top && event.clientY <= box.bottom;
+    if (!inside) addDialog.close();
+  });
+</script>
 {% endblock %}
