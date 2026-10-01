@@ -502,9 +502,39 @@ section { padding: 72px 0; }
   list-style: none;
 }
 
-.honors li {
-  padding-top: 14px;
-  border-top: 1px solid var(--line);
+.honors li { padding: 0; }
+
+.honors a {
+  display: block;
+  color: inherit;
+  text-decoration: none;
+}
+
+.honors .mark {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 104px;
+  margin-bottom: 12px;
+  padding: 10px;
+  background: #fff;
+  border: 1px solid var(--line);
+}
+
+.honors .mark img {
+  display: block;
+  width: auto;
+  height: 58px;
+  max-width: 100%;
+  flex: 0 0 auto;
+}
+
+.honors .mark img.portrait { height: 76px; }
+
+.honors a:hover .mark,
+.honors a:focus-visible .mark {
+  border-color: var(--green);
 }
 
 .honors strong {
