@@ -45,33 +45,6 @@ const markCurrent = () => {
 markCurrent();
 window.addEventListener("scroll", markCurrent, { passive: true });
 
-const lensNotes = {
-  all: "The full record, in one reading.",
-  lab: "Laboratory work first: Valencia, specimens, and clinic procedure.",
-  engineering: "The degree path: biological engineering at the University of Georgia.",
-  business: "The business thread: a minor, DECA, and Dial One Security.",
-};
-
-const lensNote = document.getElementById("lens-note");
-
-const applyLens = (name) => {
-  document.body.dataset.lens = name;
-  document.querySelectorAll("[data-for]").forEach((el) => {
-    const tags = el.dataset.for.split(/\s+/);
-    const match = name === "all" || tags.includes(name);
-    el.classList.toggle("is-dim", name !== "all" && !match);
-    el.classList.toggle("is-lit", name !== "all" && match);
-  });
-  document.querySelectorAll("[data-lens-btn]").forEach((button) => {
-    button.setAttribute("aria-checked", String(button.dataset.lensBtn === name));
-  });
-  if (lensNote) lensNote.textContent = lensNotes[name] || lensNotes.all;
-};
-
-document.querySelectorAll("[data-lens-btn]").forEach((button) => {
-  button.addEventListener("click", () => applyLens(button.dataset.lensBtn));
-});
-
 document.querySelectorAll(".role").forEach((role) => {
   const toggle = role.querySelector(".role-toggle");
   const tabs = [...role.querySelectorAll(".beats [role='tab']")];
@@ -97,43 +70,6 @@ document.querySelectorAll(".role").forEach((role) => {
         if (copies[itemIndex]) copies[itemIndex].hidden = !on;
       });
     });
-  });
-});
-
-const stops = {
-  cincinnati: {
-    kicker: "Cincinnati, Ohio",
-    copy: "Indian Hill High School through May 2024, and the jobs that started there: Dial One Security from 2020, Camargo Trading in 2021–2022, and Kenwood Complete Dentistry in 2023.",
-    fill: 0,
-  },
-  athens: {
-    kicker: "Athens, Georgia",
-    copy: "University of Georgia, second year. Biological engineering, a business minor, and a 3.4 GPA.",
-    fill: 0.5,
-  },
-  valencia: {
-    kicker: "Valencia, Spain",
-    copy: "June and July 2026. Veterinary laboratory intern at Sagunto 99: specimens, procedures, and a clinic that worked in Spanish.",
-    fill: 1,
-  },
-};
-
-const routeKicker = document.getElementById("route-kicker");
-const routeCopy = document.getElementById("route-copy");
-const routeFill = document.getElementById("route-fill");
-
-document.querySelectorAll("[data-stop]").forEach((button) => {
-  button.addEventListener("click", () => {
-    const stop = stops[button.dataset.stop];
-    if (!stop) return;
-    document.querySelectorAll("[data-stop]").forEach((item) => {
-      const on = item === button;
-      item.classList.toggle("is-on", on);
-      item.setAttribute("aria-pressed", String(on));
-    });
-    if (routeKicker) routeKicker.textContent = stop.kicker;
-    if (routeCopy) routeCopy.textContent = stop.copy;
-    if (routeFill) routeFill.style.setProperty("--route", String(stop.fill));
   });
 });
 
