@@ -5,6 +5,7 @@ const menu = document.querySelector(".nav-links");
 toggle?.addEventListener("click", () => {
   const open = menu.classList.toggle("is-open");
   toggle.setAttribute("aria-expanded", String(open));
+  toggle.textContent = open ? "Close" : "Menu";
   document.body.classList.toggle("menu-open", open);
 });
 
@@ -12,6 +13,7 @@ menu?.addEventListener("click", (event) => {
   if (!event.target.closest("a")) return;
   menu.classList.remove("is-open");
   toggle?.setAttribute("aria-expanded", "false");
+  if (toggle) toggle.textContent = "Menu";
   document.body.classList.remove("menu-open");
 });
 
