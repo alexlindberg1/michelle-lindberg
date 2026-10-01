@@ -496,41 +496,46 @@ section { padding: 72px 0; }
 .honors {
   display: grid;
   grid-template-columns: repeat(5, minmax(0, 1fr));
-  gap: 18px;
+  gap: 20px;
   margin: 28px 0 0;
   padding: 0;
   list-style: none;
+  overflow: hidden;
 }
 
-.honors li { padding: 0; }
+.honors li {
+  min-width: 0;
+  padding: 0;
+}
 
 .honors a {
   display: block;
+  min-width: 0;
   color: inherit;
   text-decoration: none;
 }
 
 .honors .mark {
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  display: grid;
+  place-items: center;
   width: 100%;
-  height: 104px;
-  margin-bottom: 12px;
-  padding: 10px;
+  height: 72px;
+  margin: 0 0 14px;
+  padding: 8px 10px;
+  overflow: hidden;
   background: #fff;
   border: 1px solid var(--line);
 }
 
 .honors .mark img {
   display: block;
-  width: auto;
-  height: 58px;
+  width: 100%;
+  height: 44px;
   max-width: 100%;
-  flex: 0 0 auto;
+  max-height: 44px;
+  object-fit: contain;
+  object-position: center;
 }
-
-.honors .mark img.portrait { height: 76px; }
 
 .honors a:hover .mark,
 .honors a:focus-visible .mark {
