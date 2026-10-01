@@ -1,0 +1,9 @@
+.git
+.venv
+__pycache__
+data
+.secrets
+original
+resume
+agent-transcripts
+*.md

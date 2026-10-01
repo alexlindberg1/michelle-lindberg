@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% block title %}Edit {{ item.company }}{% endblock %}
+{% block body %}
+<header class="top">
+  <div>
+    <p class="eyebrow"><a href="{{ path }}">Applications</a></p>
+    <h1>Edit {{ item.company }}</h1>
+  </div>
+</header>
+<section class="panel">
+  <form method="post" action="{{ path }}/applications/{{ item.id }}">
+    {% include "form.html" %}
+    <button type="submit">Save application</button>
+  </form>
+</section>
+<section class="panel danger">
+  <h2>Remove</h2>
+  <form method="post" action="{{ path }}/applications/{{ item.id }}/delete">
+    <input type="hidden" name="csrf" value="{{ csrf }}">
+    <button type="submit" class="quiet">Delete this application</button>
+  </form>
+</section>
+{% endblock %}
