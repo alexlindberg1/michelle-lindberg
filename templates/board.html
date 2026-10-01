@@ -2,8 +2,7 @@
 {% block title %}Applications{% endblock %}
 {% block body %}
 <header class="top">
-  <div>
-    <p class="eyebrow">Unlisted</p>
+  <div class="title-line">
     <h1>Applications</h1>
     <p class="summary" id="summary">{{ summary }}</p>
   </div>
@@ -32,6 +31,18 @@
 <div class="table-wrap">
   <table>
     <caption>Internship applications</caption>
+    <colgroup>
+      <col class="c-company">
+      <col class="c-role">
+      <col class="c-site">
+      <col class="c-location">
+      <col class="c-status">
+      <col class="c-date">
+      <col class="c-date">
+      <col class="c-contact">
+      <col class="c-notes">
+      <col class="c-edit">
+    </colgroup>
     <thead>
       <tr>
         <th>Company</th>
@@ -63,7 +74,7 @@
         <td>{{ row.deadline }}</td>
         <td>{{ row.contact }}</td>
         <td class="notes">{{ row.notes[:140] }}{% if row.notes|length > 140 %}…{% endif %}</td>
-        <td><a href="{{ path }}/applications/{{ row.id }}">Edit {{ row.company }}</a></td>
+        <td><a href="{{ path }}/applications/{{ row.id }}" aria-label="Edit {{ row.company }}">Edit</a></td>
       </tr>
       {% endfor %}
       {% else %}

@@ -50,30 +50,52 @@ h1, h2 {
   margin: 0;
 }
 
-h1 { font-size: clamp(2.4rem, 5vw, 4rem); line-height: 0.95; }
+h1 { font-size: 2.35rem; line-height: 1; }
 h2 { font-size: 1.7rem; margin-bottom: 16px; }
 
 .top {
   display: flex;
   justify-content: space-between;
-  align-items: flex-start;
-  gap: 16px;
-  margin-bottom: 22px;
+  align-items: center;
+  gap: 24px;
+  margin-bottom: 18px;
+}
+
+.title-line {
+  display: flex;
+  align-items: baseline;
+  gap: 14px;
+  min-width: 0;
 }
 
 .top-actions {
   display: flex;
+  flex-flow: row nowrap;
   align-items: center;
-  gap: 10px;
+  gap: 8px;
+  flex: 0 0 auto;
 }
 
-.summary { color: var(--muted); margin: 0 0 14px; }
+.top-actions form {
+  display: flex;
+  margin: 0;
+}
+
+.top-actions button {
+  margin: 0;
+  height: 36px;
+  white-space: nowrap;
+}
+
+.summary { color: var(--muted); margin: 0; }
 
 .filters {
   display: flex;
   flex-wrap: wrap;
-  gap: 8px 14px;
-  margin-bottom: 16px;
+  align-items: center;
+  gap: 6px 16px;
+  margin: 0;
+  padding: 0 0 8px;
 }
 
 .filters a {
@@ -166,13 +188,28 @@ button.quiet {
 
 .error { color: var(--copper); }
 
-.table-wrap { overflow-x: auto; }
+.table-wrap {
+  overflow-x: auto;
+  margin-top: 0;
+  border-top: 1px solid var(--line);
+}
 
 table {
   width: 100%;
   border-collapse: collapse;
-  min-width: 1080px;
+  table-layout: fixed;
+  min-width: 980px;
 }
+
+.c-company { width: 15%; }
+.c-role { width: 13%; }
+.c-site { width: 16%; }
+.c-location { width: 12%; }
+.c-status { width: 11%; }
+.c-date { width: 9%; }
+.c-contact { width: 12%; }
+.c-notes { width: 14%; }
+.c-edit { width: 8%; }
 
 caption, .sr {
   position: absolute;
@@ -185,12 +222,18 @@ caption, .sr {
 th, td {
   text-align: left;
   vertical-align: top;
-  padding: 14px 16px 14px 0;
+  padding: 11px 12px;
   border-bottom: 1px solid var(--line);
-  font-size: 1.02rem;
+  font-size: 0.98rem;
 }
 
-th { color: var(--muted); font-weight: 400; }
+th:first-child,
+td:first-child { padding-left: 0; }
+
+th:last-child,
+td:last-child { padding-right: 0; text-align: right; white-space: nowrap; }
+
+th { color: var(--muted); font-weight: 400; padding-top: 10px; }
 
 td a { color: var(--green); }
 
@@ -232,7 +275,7 @@ dialog::backdrop {
   white-space: pre-wrap;
 }
 
-.empty { color: var(--muted); }
+.empty { color: var(--muted); padding-top: 14px; padding-bottom: 14px; }
 
 :focus-visible {
   outline: 2px solid var(--green);
@@ -242,4 +285,6 @@ dialog::backdrop {
 @media (max-width: 720px) {
   .fields { grid-template-columns: 1fr; }
   .search input { min-width: 0; flex: 1; }
+  .top { align-items: flex-start; }
+  .title-line { flex-direction: column; align-items: flex-start; gap: 6px; }
 }
