@@ -537,6 +537,12 @@ section { padding: 72px 0; }
   object-position: center;
 }
 
+.honors .mark img.portrait {
+  width: auto;
+  height: 60px;
+  max-height: 60px;
+}
+
 .honors a:hover .mark,
 .honors a:focus-visible .mark {
   border-color: var(--green);
