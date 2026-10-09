@@ -64,7 +64,7 @@
       {% if rows %}
       {% for row in rows %}
       <tr>
-        <td>{{ row.company }}</td>
+        <td><span class="company-cell">{% if row.favicon %}<img class="favicon" src="{{ row.favicon }}" alt="" loading="lazy" width="16" height="16" onerror="this.remove()">{% endif %}<span>{{ row.company }}</span></span></td>
         <td class="interest">
           {% set score = row.interest|default(0)|int %}
           <form class="stars" method="post" action="{{ path }}/applications/{{ row.id }}/interest" aria-label="Interest in {{ row.company }}">
@@ -85,7 +85,14 @@
         <td>{{ row.applied_on }}</td>
         <td>{{ row.deadline }}</td>
         <td>{{ row.contact }}</td>
-        <td class="notes">{{ row.notes[:140] }}{% if row.notes|length > 140 %}…{% endif %}</td>
+        <td class="notes">
+          {% if row.notes %}
+          <details>
+            <summary>{{ row.notes[:70].splitlines()[0] }}{% if row.notes|length > 70 %}…{% endif %}</summary>
+            <p>{{ row.notes }}</p>
+          </details>
+          {% endif %}
+        </td>
         <td><a href="{{ path }}/applications/{{ row.id }}" aria-label="Edit {{ row.company }}">Edit</a></td>
       </tr>
       {% endfor %}

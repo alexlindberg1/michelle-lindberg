@@ -23,7 +23,7 @@ body {
 }
 
 .sheet, .signin {
-  width: min(1440px, calc(100% - 40px));
+  width: min(1560px, calc(100% - 40px));
   margin: 0 auto;
   padding: 28px 0 64px;
 }
@@ -288,6 +288,31 @@ dialog::backdrop {
 
 .notes {
   max-width: 220px;
+  white-space: pre-wrap;
+}
+
+.company-cell {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+}
+
+.favicon {
+  flex: none;
+  width: 16px;
+  height: 16px;
+}
+
+.notes details summary {
+  cursor: pointer;
+  color: var(--ink-soft);
+}
+
+.notes details summary:hover { color: var(--green); }
+
+.notes details p {
+  margin: 8px 0 0;
   white-space: pre-wrap;
 }
 

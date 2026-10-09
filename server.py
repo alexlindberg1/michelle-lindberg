@@ -390,6 +390,16 @@ def create_app(settings=None):
             rows.sort(key=lambda row: row.get("updated_at", ""), reverse=True)
             return rows
 
+        def favicon_for(website):
+            try:
+                host = urlparse(website or "").hostname or ""
+            except ValueError:
+                return ""
+            host = host.strip().lower()
+            if not host:
+                return ""
+            return f"https://www.google.com/s2/favicons?domain={host}&sz=64"
+
         def board_response(draft=None, error=""):
             status_filter = request.args.get("status", "").strip()
             if status_filter not in STATUSES:
@@ -403,9 +413,13 @@ def create_app(settings=None):
             summary = f"{len(rows)} saved"
             if bits:
                 summary = summary + ". " + " · ".join(bits)
+            table_rows = [
+                {**row, "favicon": favicon_for(row.get("website", ""))}
+                for row in visible_rows(rows)
+            ]
             return render_private(
                 "board.html",
-                rows=visible_rows(rows),
+                rows=table_rows,
                 summary=summary,
                 draft=draft if draft is not None else blank(),
                 error=error,
