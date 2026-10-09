@@ -1,18 +1,21 @@
 {% extends "base.html" %}
 {% block title %}Applications{% endblock %}
 {% block body %}
-<header class="top">
-  <div class="title-line">
-    <h1>Applications</h1>
-    <p class="summary" id="summary">{{ summary }}</p>
+<header class="appbar">
+  <div class="appbar-main">
+    <p class="crumb">Michelle Lindberg <span aria-hidden="true">/</span> Recruiting</p>
+    <div class="title-row">
+      <h1>Applications</h1>
+      <p class="summary" id="summary">{{ summary }}</p>
+    </div>
   </div>
-  <div class="top-actions">
-    <a class="quiet export-link" href="{{ path }}/export{% if status_filter or query %}?{% if status_filter %}status={{ status_filter | urlencode }}{% endif %}{% if status_filter and query %}&{% endif %}{% if query %}q={{ query | urlencode }}{% endif %}{% endif %}">Export</a>
+  <div class="appbar-actions">
+    <a class="btn btn-ghost export-link" href="{{ path }}/export{% if status_filter or query %}?{% if status_filter %}status={{ status_filter | urlencode }}{% endif %}{% if status_filter and query %}&{% endif %}{% if query %}q={{ query | urlencode }}{% endif %}{% endif %}">Export CSV</a>
     <form method="post" action="{{ path }}/logout">
       <input type="hidden" name="csrf" value="{{ csrf }}">
-      <button type="submit" class="quiet">Log out</button>
+      <button type="submit" class="btn btn-ghost">Log out</button>
     </form>
-    <button type="button" id="open-add">Add application</button>
+    <button type="button" class="btn btn-primary" id="open-add">Add application</button>
   </div>
 </header>
 
@@ -31,13 +34,14 @@
   <input type="hidden" name="sort" value="{{ sort }}">
   <input type="hidden" name="dir" value="{{ direction }}">
   {% endif %}
-  <p>
-    <label for="q">Search</label>
-    <input id="q" name="q" type="search" value="{{ query }}" placeholder="Company, role, location…" autocomplete="off">
+  <p class="search-field">
+    <label class="sr" for="q">Search applications</label>
+    <svg class="search-icon" width="15" height="15" viewBox="0 0 16 16" fill="none" aria-hidden="true"><circle cx="7" cy="7" r="5" stroke="currentColor" stroke-width="1.5"/><path d="M11 11l3 3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+    <input id="q" name="q" type="search" value="{{ query }}" placeholder="Search company, role, location…" autocomplete="off">
   </p>
-  <button type="submit">Search</button>
+  <button class="btn btn-primary btn-sm" type="submit">Search</button>
   {% if query %}
-  <a class="quiet" href="{{ url_with(q=None, page=None) }}">Clear</a>
+  <a class="btn btn-ghost btn-sm" href="{{ url_with(q=None, page=None) }}">Clear</a>
   {% endif %}
 </form>
 
@@ -47,6 +51,7 @@
 {% endif %}
 {% endwith %}
 
+<div class="table-card">
 <div class="table-wrap">
   <table>
     <caption>Internship applications</caption>
@@ -63,12 +68,12 @@
     <thead>
       <tr>
         {% macro sort_link(key, label) %}
-        <a class="sort" href="{{ url_with(sort=key, dir='desc' if sort == key and direction == 'asc' else 'asc', page=None) }}">{{ label }}{% if sort == key %} <span aria-hidden="true">{{ '▲' if direction == 'asc' else '▼' }}</span>{% endif %}</a>
+        <a class="sort" href="{{ url_with(sort=key, dir='desc' if sort == key and direction == 'asc' else 'asc', page=None) }}">{{ label }}{% if sort == key %} <span class="sort-arrow" aria-hidden="true">{{ '▲' if direction == 'asc' else '▼' }}</span>{% endif %}</a>
         {% endmacro %}
         <th>{{ sort_link('company', 'Company') }}</th>
         <th>{{ sort_link('interest', 'Interest') }}</th>
-        <th>{{ sort_link('place', 'Place') }}</th>
-        <th>{{ sort_link('pay', 'Pay') }}</th>
+        <th>{{ sort_link('place', 'Location') }}</th>
+        <th class="th-num">{{ sort_link('pay', 'Pay') }}</th>
         <th>{{ sort_link('status', 'Status') }}</th>
         <th>{{ sort_link('dates', 'Dates') }}</th>
         <th>Details</th>
@@ -80,7 +85,7 @@
       {% for row in rows %}
       <tr>
         <td>
-          <span class="company-cell">{% if row.favicon %}<img class="favicon" src="{{ row.favicon }}" alt="" loading="lazy" width="16" height="16" onerror="this.remove()">{% endif %}{% if row.website %}<a href="{{ row.website }}" rel="noreferrer noopener" target="_blank">{{ row.company }}</a>{% else %}<span>{{ row.company }}</span>{% endif %}{% if row.posting_url %}<a class="app-link" href="{{ row.posting_url }}" rel="noreferrer noopener" target="_blank" aria-label="Open application for {{ row.company }}" title="Open application">↗</a>{% endif %}</span>
+          <span class="company-cell">{% if row.favicon %}<img class="favicon" src="{{ row.favicon }}" alt="" loading="lazy" width="16" height="16" onerror="this.remove()">{% endif %}<span class="company-names">{% if row.website %}<a class="company-link" href="{{ row.website }}" rel="noreferrer noopener" target="_blank">{{ row.company }}</a>{% else %}<span class="company-link">{{ row.company }}</span>{% endif %}{% if row.posting_url %}<a class="app-link" href="{{ row.posting_url }}" rel="noreferrer noopener" target="_blank" aria-label="Open application for {{ row.company }}" title="Open application">↗</a>{% endif %}</span></span>
           {% if row.role %}<span class="sub">{{ row.role }}</span>{% endif %}
         </td>
         <td class="interest">
@@ -92,13 +97,9 @@
             {% endfor %}
           </form>
         </td>
-        <td>
-          {{ row.location }}
-        </td>
-        <td class="pay">
-          {{ row.pay }}
-        </td>
-        <td><span class="pill pill-{{ row.status | lower | replace(' ', '-') }}">{{ row.status }}</span></td>
+        <td class="place">{{ row.location }}</td>
+        <td class="pay">{{ row.pay }}</td>
+        <td><span class="pill pill-{{ row.status | lower | replace(' ', '-') }}"><i class="dot" aria-hidden="true"></i>{{ row.status }}</span></td>
         <td class="dates">
           {{ row.applied_on }}
           {% if row.deadline %}<span class="sub">Due {{ row.deadline }}</span>{% endif %}
@@ -112,16 +113,20 @@
           </details>
           {% endif %}
         </td>
-        <td><a href="{{ path }}/applications/{{ row.id }}" aria-label="Edit {{ row.company }}">Edit</a></td>
+        <td class="row-edit"><a href="{{ path }}/applications/{{ row.id }}" aria-label="Edit {{ row.company }}">Edit</a></td>
       </tr>
       {% endfor %}
       {% else %}
       <tr>
-        <td class="empty" colspan="8">No applications in this view yet.</td>
+        <td class="empty" colspan="8">
+          <p class="empty-title">No applications in this view</p>
+          <p class="empty-sub">Try a different filter, or add the first application.</p>
+        </td>
       </tr>
       {% endif %}
     </tbody>
   </table>
+</div>
 </div>
 
 {% if pages > 1 %}
@@ -142,11 +147,11 @@
   <form method="post" action="{{ path }}/applications">
     <div class="modal-head">
       <h2 id="add-heading">Add an application</h2>
-      <button type="button" class="quiet" id="close-add">Cancel</button>
+      <button type="button" class="btn btn-ghost btn-sm" id="close-add">Cancel</button>
     </div>
     {% set item = draft %}
     {% include "form.html" %}
-    <button type="submit">Save application</button>
+    <button class="btn btn-primary" type="submit">Save application</button>
   </form>
 </dialog>
 
@@ -168,7 +173,7 @@
         note.id = "stars-error";
         note.className = "flash";
         note.setAttribute("role", "alert");
-        form.closest(".table-wrap").before(note);
+        form.closest(".table-card").before(note);
       }
       note.textContent = "Could not save that rating. Try again.";
       clearTimeout(showError.timer);
