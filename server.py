@@ -6,7 +6,7 @@ import secrets
 import threading
 from datetime import datetime, timezone
 from pathlib import Path
-from urllib.parse import urlparse
+from urllib.parse import urlencode, urlparse
 
 from flask import (
     Flask,
@@ -306,7 +306,7 @@ def create_app(settings=None):
                 if "X-Dashboard-Key" in request.headers:
                     return private(jsonify(error="unauthorized")), 401
                 abort(401)
-            rows = visible_rows(app.config["LEDGER"].read())
+            rows = visible_rows(app.config["LEDGER"].read(), paginate=False)[0]
             columns = (
                 "id",
                 "company",
@@ -380,7 +380,26 @@ def create_app(settings=None):
                     return row
             return None
 
-        def visible_rows(rows):
+        SORTS = {
+            "company": lambda row: (
+                (row.get("company") or "").lower(),
+                (row.get("role") or "").lower(),
+            ),
+            "interest": lambda row: int(row.get("interest") or 0),
+            "place": lambda row: (
+                (row.get("location") or "").lower(),
+                (row.get("pay") or "").lower(),
+            ),
+            "status": lambda row: (
+                STATUSES.index(row.get("status"))
+                if row.get("status") in STATUSES
+                else len(STATUSES)
+            ),
+            "dates": lambda row: (row.get("applied_on") or "", row.get("deadline") or ""),
+        }
+        PER_PAGE = 25
+
+        def visible_rows(rows, paginate=True):
             status_filter = request.args.get("status", "").strip()
             query = request.args.get("q", "").strip().lower()
             if status_filter in STATUSES:
@@ -393,8 +412,40 @@ def create_app(settings=None):
                         for key in ("company", "role", "website", "location", "pay", "contact", "notes")
                     ).lower()
                 ]
-            rows.sort(key=lambda row: row.get("updated_at", ""), reverse=True)
-            return rows
+            sort = request.args.get("sort", "").strip()
+            direction = request.args.get("dir", "").strip()
+            if sort in SORTS:
+                direction = "desc" if direction == "desc" else "asc"
+                rows.sort(key=SORTS[sort], reverse=(direction == "desc"))
+            else:
+                sort, direction = "", ""
+                rows.sort(key=lambda row: row.get("updated_at", ""), reverse=True)
+            total = len(rows)
+            page, pages = 1, 1
+            if paginate:
+                try:
+                    page = max(int(request.args.get("page", "1")), 1)
+                except ValueError:
+                    page = 1
+                pages = max((total + PER_PAGE - 1) // PER_PAGE, 1)
+                page = min(page, pages)
+                rows = rows[(page - 1) * PER_PAGE : page * PER_PAGE]
+            return rows, total, page, pages, sort, direction
+
+        def url_with(**overrides):
+            params = {}
+            for key in ("status", "q", "sort", "dir", "page"):
+                value = request.args.get(key, "")
+                if value:
+                    params[key] = value
+            for key, value in overrides.items():
+                if value in (None, ""):
+                    params.pop(key, None)
+                else:
+                    params[key] = str(value)
+            if not params:
+                return prefix
+            return prefix + "?" + urlencode(params)
 
         def favicon_for(website):
             try:
@@ -419,14 +470,16 @@ def create_app(settings=None):
             summary = f"{len(rows)} saved"
             if bits:
                 summary = summary + ". " + " · ".join(bits)
-            matched = visible_rows(rows)
+            matched, total, page, pages, sort, direction = visible_rows(rows)
             table_rows = [
                 {**row, "favicon": favicon_for(row.get("website", ""))}
                 for row in matched
             ]
             query = request.args.get("q", "")
-            if query and len(matched) != len(rows):
-                summary = summary + f'. {len(matched)} matching "{query}"'
+            if query and total != len(rows):
+                summary = summary + f'. {total} matching "{query}"'
+            start = (page - 1) * PER_PAGE + 1 if total else 0
+            end = min(page * PER_PAGE, total)
             return render_private(
                 "board.html",
                 rows=table_rows,
@@ -435,6 +488,14 @@ def create_app(settings=None):
                 error=error,
                 query=query,
                 status_filter=status_filter,
+                sort=sort,
+                direction=direction,
+                page=page,
+                pages=pages,
+                total=total,
+                start=start,
+                end=end,
+                url_with=url_with,
             )
 
     @app.get("/<path:filename>")

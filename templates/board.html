@@ -17,9 +17,9 @@
 </header>
 
 <nav class="filters" aria-label="Filter by status">
-  <a href="{{ path }}{% if query %}?q={{ query | urlencode }}{% endif %}" {% if not status_filter %}aria-current="true"{% endif %}>All</a>
+  <a href="{{ url_with(status=None, page=None) }}" {% if not status_filter %}aria-current="true"{% endif %}>All</a>
   {% for status in statuses %}
-  <a href="{{ path }}?status={{ status | urlencode }}{% if query %}&q={{ query | urlencode }}{% endif %}" {% if status_filter == status %}aria-current="true"{% endif %}>{{ status }}</a>
+  <a href="{{ url_with(status=status, page=None) }}" {% if status_filter == status %}aria-current="true"{% endif %}>{{ status }}</a>
   {% endfor %}
 </nav>
 
@@ -27,13 +27,17 @@
   {% if status_filter %}
   <input type="hidden" name="status" value="{{ status_filter }}">
   {% endif %}
+  {% if sort %}
+  <input type="hidden" name="sort" value="{{ sort }}">
+  <input type="hidden" name="dir" value="{{ direction }}">
+  {% endif %}
   <p>
     <label for="q">Search</label>
     <input id="q" name="q" type="search" value="{{ query }}" placeholder="Company, role, location…" autocomplete="off">
   </p>
   <button type="submit">Search</button>
   {% if query %}
-  <a class="quiet" href="{{ path }}{% if status_filter %}?status={{ status_filter | urlencode }}{% endif %}">Clear</a>
+  <a class="quiet" href="{{ url_with(q=None, page=None) }}">Clear</a>
   {% endif %}
 </form>
 
@@ -58,12 +62,15 @@
     </colgroup>
     <thead>
       <tr>
-        <th>Company</th>
-        <th>Interest</th>
+        {% macro sort_link(key, label) %}
+        <a class="sort" href="{{ url_with(sort=key, dir='desc' if sort == key and direction == 'asc' else 'asc', page=None) }}">{{ label }}{% if sort == key %} <span aria-hidden="true">{{ '▲' if direction == 'asc' else '▼' }}</span>{% endif %}</a>
+        {% endmacro %}
+        <th>{{ sort_link('company', 'Company') }}</th>
+        <th>{{ sort_link('interest', 'Interest') }}</th>
         <th><span class="sr">Website</span></th>
-        <th>Place</th>
-        <th>Status</th>
-        <th>Dates</th>
+        <th>{{ sort_link('place', 'Place') }}</th>
+        <th>{{ sort_link('status', 'Status') }}</th>
+        <th>{{ sort_link('dates', 'Dates') }}</th>
         <th>Details</th>
         <th><span class="sr">Edit</span></th>
       </tr>
@@ -119,6 +126,20 @@
     </tbody>
   </table>
 </div>
+
+{% if pages > 1 %}
+<nav class="pager" aria-label="Pages">
+  {% if page > 1 %}
+  <a href="{{ url_with(page=page - 1) }}">← Prev</a>
+  {% endif %}
+  <span>Page {{ page }} of {{ pages }} · {{ start }}–{{ end }} of {{ total }}</span>
+  {% if page < pages %}
+  <a href="{{ url_with(page=page + 1) }}">Next →</a>
+  {% endif %}
+</nav>
+{% elif total > 0 %}
+<p class="range">Showing {{ start }}–{{ end }} of {{ total }}</p>
+{% endif %}
 
 <dialog id="add-dialog" {% if error %}open{% endif %}>
   <form method="post" action="{{ path }}/applications">
