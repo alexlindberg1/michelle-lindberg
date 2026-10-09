@@ -1,4 +1,6 @@
+import csv
 import hmac
+import io
 import os
 import secrets
 import threading
@@ -292,6 +294,41 @@ def create_app(settings=None):
             app.config["LEDGER"].update(mutate)
             flash("Deleted that application.")
             return redirect(prefix)
+
+        @app.get(prefix + "/export")
+        def export_applications():
+            if not authed() and not key_ok():
+                if "X-Dashboard-Key" in request.headers:
+                    return private(jsonify(error="unauthorized")), 401
+                abort(401)
+            rows = visible_rows(app.config["LEDGER"].read())
+            columns = (
+                "id",
+                "company",
+                "role",
+                "website",
+                "location",
+                "status",
+                "interest",
+                "applied_on",
+                "deadline",
+                "contact",
+                "notes",
+                "created_at",
+                "updated_at",
+            )
+            buf = io.StringIO()
+            writer = csv.DictWriter(buf, fieldnames=columns, extrasaction="ignore")
+            writer.writeheader()
+            for row in rows:
+                writer.writerow({key: row.get(key, "") for key in columns})
+            stamp = datetime.now(timezone.utc).strftime("%Y%m%d")
+            response = make_response(buf.getvalue())
+            response.headers["Content-Type"] = "text/csv; charset=utf-8"
+            response.headers["Content-Disposition"] = (
+                f"attachment; filename=applications-{stamp}.csv"
+            )
+            return private(response)
 
         @app.get(prefix + "/api/applications")
         def api_list():
