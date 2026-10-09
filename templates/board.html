@@ -118,6 +118,56 @@
 </dialog>
 
 <script>
+  document.querySelectorAll("form.stars").forEach((form) => {
+    const buttons = [...form.querySelectorAll("button")];
+    const paint = (score) => {
+      buttons.forEach((button) => {
+        const on = Number(button.value) <= score;
+        button.classList.toggle("is-on", on);
+        button.textContent = on ? "★" : "☆";
+        button.setAttribute("aria-pressed", String(Number(button.value) === score));
+      });
+    };
+    const showError = () => {
+      let note = document.getElementById("stars-error");
+      if (!note) {
+        note = document.createElement("p");
+        note.id = "stars-error";
+        note.className = "flash";
+        note.setAttribute("role", "alert");
+        form.closest(".table-wrap").before(note);
+      }
+      note.textContent = "Could not save that rating. Try again.";
+      clearTimeout(showError.timer);
+      showError.timer = setTimeout(() => note.remove(), 4000);
+    };
+    form.addEventListener("submit", (event) => {
+      const clicked = event.submitter;
+      if (!clicked || form.dataset.pending) return;
+      event.preventDefault();
+      const current = buttons.filter((button) => button.classList.contains("is-on")).length;
+      const chosen = Number(clicked.value);
+      const previous = current;
+      paint(current === chosen ? 0 : chosen);
+      form.dataset.pending = "1";
+      const body = new FormData(form);
+      body.set("interest", clicked.value);
+      fetch(form.action, { method: "POST", body, headers: { Accept: "application/json" } })
+        .then((response) => {
+          if (!response.ok) throw new Error("save failed");
+          return response.json();
+        })
+        .then((data) => paint(Number(data.interest) || 0))
+        .catch(() => {
+          paint(previous);
+          showError();
+        })
+        .finally(() => {
+          delete form.dataset.pending;
+        });
+    });
+  });
+
   const addDialog = document.getElementById("add-dialog");
   document.getElementById("open-add").addEventListener("click", () => addDialog.showModal());
   document.getElementById("close-add").addEventListener("click", () => addDialog.close());

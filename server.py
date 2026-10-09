@@ -280,6 +280,8 @@ def create_app(settings=None):
                 return updated
 
             app.config["LEDGER"].update(mutate)
+            if "application/json" in request.headers.get("Accept", ""):
+                return private(jsonify(interest=new_value))
             return redirect(prefix)
 
         @app.post(prefix + "/applications/<application_id>/delete")

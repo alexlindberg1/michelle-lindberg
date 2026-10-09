@@ -91,14 +91,14 @@ class TrackerTests(unittest.TestCase):
             data={"csrf": token, "interest": "4"},
             follow_redirects=True,
         )
-        self.assertEqual(starred.get_data(as_text=True).count("is-on"), 4)
+        self.assertEqual(starred.get_data(as_text=True).count(">★<"), 4)
         self.assertEqual(self.ledger.read()[0]["interest"], 4)
         cleared = self.client.post(
             PATH + "/applications/" + rows[0]["id"] + "/interest",
             data={"csrf": token, "interest": "4"},
             follow_redirects=True,
         )
-        self.assertEqual(cleared.get_data(as_text=True).count("is-on"), 0)
+        self.assertEqual(cleared.get_data(as_text=True).count(">★<"), 0)
         self.assertEqual(self.ledger.read()[0]["interest"], 0)
         edit = self.client.get(PATH + "/applications/" + rows[0]["id"])
         self.assertIn("Edit Rivian", edit.get_data(as_text=True))
