@@ -240,19 +240,16 @@ table {
   width: 100%;
   border-collapse: collapse;
   table-layout: fixed;
-  min-width: 980px;
+  min-width: 760px;
 }
 
-.c-company { width: 12%; }
+.c-company { width: 22%; }
 .c-interest { width: 11%; }
-.c-role { width: 10%; }
-.c-site { width: 12%; }
-.c-location { width: 8%; }
-.c-pay { width: 8%; }
-.c-status { width: 8%; }
-.c-date { width: 7%; }
-.c-contact { width: 7%; }
-.c-notes { width: 7%; }
+.c-site { width: 4%; }
+.c-place { width: 15%; }
+.c-status { width: 11%; }
+.c-dates { width: 12%; }
+.c-details { width: 19%; }
 .c-edit { width: 6%; }
 
 caption, .sr {
@@ -266,9 +263,9 @@ caption, .sr {
 th, td {
   text-align: left;
   vertical-align: middle;
-  padding: 11px 12px;
+  padding: 8px 10px;
   border-bottom: 1px solid var(--line);
-  font-size: 0.98rem;
+  font-size: 0.92rem;
   overflow: hidden;
 }
 
@@ -282,13 +279,37 @@ th { color: var(--muted); font-weight: 400; padding-top: 10px; }
 
 td a { color: var(--green); }
 
-td.site a {
+td.site { text-align: center; }
+
+a.ext {
   display: inline-block;
-  max-width: 100%;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  vertical-align: bottom;
+  min-width: 28px;
+  min-height: 28px;
+  line-height: 28px;
+  text-align: center;
+  color: var(--green);
+  text-decoration: none;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  font-size: 15px;
+}
+
+a.ext:hover { border-color: var(--green); }
+
+.sub {
+  display: block;
+  margin-top: 2px;
+  color: var(--muted);
+  font-size: 0.85rem;
+  line-height: 1.35;
+}
+
+td.dates { white-space: nowrap; }
+
+.contact {
+  display: block;
+  margin-bottom: 4px;
+  font-size: 0.85rem;
 }
 
 td.interest { overflow: visible; }
@@ -354,17 +375,19 @@ dialog::backdrop {
   margin: 0;
 }
 
+.stars { flex-wrap: nowrap; }
+
 .stars button,
 .stars button:hover {
-  width: 22px;
-  height: 28px;
+  width: 19px;
+  height: 26px;
   min-height: 0;
   margin: 0;
   padding: 0;
   border: 0;
   background: transparent;
   color: #c4bdb2;
-  font-size: 18px;
+  font-size: 15px;
   line-height: 1;
   letter-spacing: 0;
   text-transform: none;

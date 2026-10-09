@@ -49,30 +49,22 @@
     <colgroup>
       <col class="c-company">
       <col class="c-interest">
-      <col class="c-role">
       <col class="c-site">
-      <col class="c-location">
-      <col class="c-pay">
+      <col class="c-place">
       <col class="c-status">
-      <col class="c-date">
-      <col class="c-date">
-      <col class="c-contact">
-      <col class="c-notes">
+      <col class="c-dates">
+      <col class="c-details">
       <col class="c-edit">
     </colgroup>
     <thead>
       <tr>
         <th>Company</th>
         <th>Interest</th>
-        <th>Role</th>
-        <th>Website</th>
-        <th>Location</th>
-        <th>Pay</th>
+        <th><span class="sr">Website</span></th>
+        <th>Place</th>
         <th>Status</th>
-        <th>Applied</th>
-        <th>Deadline</th>
-        <th>Contact</th>
-        <th>Notes</th>
+        <th>Dates</th>
+        <th>Details</th>
         <th><span class="sr">Edit</span></th>
       </tr>
     </thead>
@@ -80,7 +72,10 @@
       {% if rows %}
       {% for row in rows %}
       <tr>
-        <td><span class="company-cell">{% if row.favicon %}<img class="favicon" src="{{ row.favicon }}" alt="" loading="lazy" width="16" height="16" onerror="this.remove()">{% endif %}<span>{{ row.company }}</span></span></td>
+        <td>
+          <span class="company-cell">{% if row.favicon %}<img class="favicon" src="{{ row.favicon }}" alt="" loading="lazy" width="16" height="16" onerror="this.remove()">{% endif %}<span>{{ row.company }}</span></span>
+          {% if row.role %}<span class="sub">{{ row.role }}</span>{% endif %}
+        </td>
         <td class="interest">
           {% set score = row.interest|default(0)|int %}
           <form class="stars" method="post" action="{{ path }}/applications/{{ row.id }}/interest" aria-label="Interest in {{ row.company }}">
@@ -90,22 +85,25 @@
             {% endfor %}
           </form>
         </td>
-        <td>{{ row.role }}</td>
         <td class="site">
           {% if row.website %}
-          <a href="{{ row.website }}" rel="noreferrer noopener" target="_blank">{{ row.website }}</a>
+          <a class="ext" href="{{ row.website }}" rel="noreferrer noopener" target="_blank" aria-label="Open posting for {{ row.company }}">↗</a>
           {% endif %}
         </td>
-        <td>{{ row.location }}</td>
-        <td>{{ row.pay }}</td>
+        <td>
+          {{ row.location }}
+          {% if row.pay %}<span class="sub">{{ row.pay }}</span>{% endif %}
+        </td>
         <td><span class="pill pill-{{ row.status | lower | replace(' ', '-') }}">{{ row.status }}</span></td>
-        <td>{{ row.applied_on }}</td>
-        <td>{{ row.deadline }}</td>
-        <td>{{ row.contact }}</td>
+        <td class="dates">
+          {{ row.applied_on }}
+          {% if row.deadline %}<span class="sub">Due {{ row.deadline }}</span>{% endif %}
+        </td>
         <td class="notes">
+          {% if row.contact %}<span class="contact">{{ row.contact }}</span>{% endif %}
           {% if row.notes %}
           <details>
-            <summary>{{ row.notes[:70].splitlines()[0] }}{% if row.notes|length > 70 %}…{% endif %}</summary>
+            <summary>{{ row.notes[:60].splitlines()[0] }}{% if row.notes|length > 60 %}…{% endif %}</summary>
             <p>{{ row.notes }}</p>
           </details>
           {% endif %}
@@ -115,7 +113,7 @@
       {% endfor %}
       {% else %}
       <tr>
-        <td class="empty" colspan="12">No applications in this view yet.</td>
+        <td class="empty" colspan="8">No applications in this view yet.</td>
       </tr>
       {% endif %}
     </tbody>
