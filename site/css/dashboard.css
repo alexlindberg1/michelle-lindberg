@@ -266,12 +266,13 @@ table {
   min-width: 760px;
 }
 
-.c-company { width: 24%; }
+.c-company { width: 22%; }
 .c-interest { width: 11%; }
-.c-place { width: 15%; }
+.c-place { width: 12%; }
+.c-pay { width: 10%; }
 .c-status { width: 11%; }
-.c-dates { width: 12%; }
-.c-details { width: 21%; }
+.c-dates { width: 11%; }
+.c-details { width: 17%; }
 .c-edit { width: 6%; }
 
 caption, .sr {

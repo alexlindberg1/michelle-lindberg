@@ -54,6 +54,7 @@
       <col class="c-company">
       <col class="c-interest">
       <col class="c-place">
+      <col class="c-pay">
       <col class="c-status">
       <col class="c-dates">
       <col class="c-details">
@@ -67,6 +68,7 @@
         <th>{{ sort_link('company', 'Company') }}</th>
         <th>{{ sort_link('interest', 'Interest') }}</th>
         <th>{{ sort_link('place', 'Place') }}</th>
+        <th>{{ sort_link('pay', 'Pay') }}</th>
         <th>{{ sort_link('status', 'Status') }}</th>
         <th>{{ sort_link('dates', 'Dates') }}</th>
         <th>Details</th>
@@ -93,7 +95,9 @@
         </td>
         <td>
           {{ row.location }}
-          {% if row.pay %}<span class="sub">{{ row.pay }}</span>{% endif %}
+        </td>
+        <td class="pay">
+          {{ row.pay }}
         </td>
         <td><span class="pill pill-{{ row.status | lower | replace(' ', '-') }}">{{ row.status }}</span></td>
         <td class="dates">
@@ -114,7 +118,7 @@
       {% endfor %}
       {% else %}
       <tr>
-        <td class="empty" colspan="7">No applications in this view yet.</td>
+        <td class="empty" colspan="8">No applications in this view yet.</td>
       </tr>
       {% endif %}
     </tbody>

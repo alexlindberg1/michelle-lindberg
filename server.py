@@ -399,6 +399,10 @@ def create_app(settings=None):
                 (row.get("location") or "").lower(),
                 (row.get("pay") or "").lower(),
             ),
+            "pay": lambda row: (
+                (row.get("pay") or "").lower(),
+                (row.get("location") or "").lower(),
+            ),
             "status": lambda row: (
                 STATUSES.index(row.get("status"))
                 if row.get("status") in STATUSES
