@@ -17,6 +17,10 @@
     <input id="location" name="location" value="{{ item.location }}">
   </p>
   <p>
+    <label for="pay">Estimated pay</label>
+    <input id="pay" name="pay" value="{{ item.pay }}" placeholder="$25/hr or $7k/mo">
+  </p>
+  <p>
     <label for="status">Status</label>
     <select id="status" name="status" required>
       {% for status in statuses %}

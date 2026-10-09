@@ -243,15 +243,16 @@ table {
   min-width: 980px;
 }
 
-.c-company { width: 13%; }
-.c-interest { width: 12%; }
-.c-role { width: 11%; }
-.c-site { width: 13%; }
-.c-location { width: 9%; }
-.c-status { width: 9%; }
-.c-date { width: 8%; }
-.c-contact { width: 8%; }
-.c-notes { width: 8%; }
+.c-company { width: 12%; }
+.c-interest { width: 11%; }
+.c-role { width: 10%; }
+.c-site { width: 12%; }
+.c-location { width: 8%; }
+.c-pay { width: 8%; }
+.c-status { width: 8%; }
+.c-date { width: 7%; }
+.c-contact { width: 7%; }
+.c-notes { width: 7%; }
 .c-edit { width: 6%; }
 
 caption, .sr {

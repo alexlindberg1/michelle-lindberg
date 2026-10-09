@@ -39,6 +39,7 @@ LIMITS = {
     "role": 160,
     "website": 400,
     "location": 120,
+    "pay": 80,
     "contact": 160,
     "notes": 4000,
 }
@@ -134,6 +135,7 @@ def create_app(settings=None):
             "role": (form.get("role") or "").strip()[: LIMITS["role"]],
             "website": website[: LIMITS["website"]],
             "location": (form.get("location") or "").strip()[: LIMITS["location"]],
+            "pay": (form.get("pay") or "").strip()[: LIMITS["pay"]],
             "status": status,
             "interest": interest,
             "applied_on": (form.get("applied_on") or "").strip()[:10],
@@ -151,6 +153,7 @@ def create_app(settings=None):
             "role": "",
             "website": "",
             "location": "",
+            "pay": "",
             "status": "To apply",
             "interest": 0,
             "applied_on": "",
@@ -310,6 +313,7 @@ def create_app(settings=None):
                 "role",
                 "website",
                 "location",
+                "pay",
                 "status",
                 "interest",
                 "applied_on",
@@ -386,7 +390,7 @@ def create_app(settings=None):
                     row for row in rows
                     if query in " ".join(
                         str(row.get(key, ""))
-                        for key in ("company", "role", "website", "location", "contact", "notes")
+                        for key in ("company", "role", "website", "location", "pay", "contact", "notes")
                     ).lower()
                 ]
             rows.sort(key=lambda row: row.get("updated_at", ""), reverse=True)

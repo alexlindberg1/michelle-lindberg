@@ -52,6 +52,7 @@
       <col class="c-role">
       <col class="c-site">
       <col class="c-location">
+      <col class="c-pay">
       <col class="c-status">
       <col class="c-date">
       <col class="c-date">
@@ -66,6 +67,7 @@
         <th>Role</th>
         <th>Website</th>
         <th>Location</th>
+        <th>Pay</th>
         <th>Status</th>
         <th>Applied</th>
         <th>Deadline</th>
@@ -95,6 +97,7 @@
           {% endif %}
         </td>
         <td>{{ row.location }}</td>
+        <td>{{ row.pay }}</td>
         <td><span class="pill pill-{{ row.status | lower | replace(' ', '-') }}">{{ row.status }}</span></td>
         <td>{{ row.applied_on }}</td>
         <td>{{ row.deadline }}</td>
@@ -112,7 +115,7 @@
       {% endfor %}
       {% else %}
       <tr>
-        <td class="empty" colspan="11">No applications in this view yet.</td>
+        <td class="empty" colspan="12">No applications in this view yet.</td>
       </tr>
       {% endif %}
     </tbody>
