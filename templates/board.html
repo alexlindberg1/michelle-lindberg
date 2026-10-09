@@ -80,6 +80,7 @@
         <td>
           <span class="company-cell">{% if row.favicon %}<img class="favicon" src="{{ row.favicon }}" alt="" loading="lazy" width="16" height="16" onerror="this.remove()">{% endif %}{% if row.website %}<a href="{{ row.website }}" rel="noreferrer noopener" target="_blank">{{ row.company }}</a>{% else %}<span>{{ row.company }}</span>{% endif %}</span>
           {% if row.role %}<span class="sub">{{ row.role }}</span>{% endif %}
+          {% if row.posting_url %}<a class="sub-link" href="{{ row.posting_url }}" rel="noreferrer noopener" target="_blank">Application ↗</a>{% endif %}
         </td>
         <td class="interest">
           {% set score = row.interest|default(0)|int %}

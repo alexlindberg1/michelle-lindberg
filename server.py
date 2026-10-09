@@ -38,6 +38,7 @@ LIMITS = {
     "company": 160,
     "role": 160,
     "website": 400,
+    "posting_url": 400,
     "location": 120,
     "pay": 80,
     "contact": 160,
@@ -119,6 +120,11 @@ def create_app(settings=None):
             website = "https://" + website
         if website and urlparse(website).scheme not in ("http", "https"):
             raise ValueError("Website must be an http or https link.")
+        posting_url = (form.get("posting_url") or "").strip()
+        if posting_url and not posting_url.startswith(("http://", "https://")):
+            posting_url = "https://" + posting_url
+        if posting_url and urlparse(posting_url).scheme not in ("http", "https"):
+            raise ValueError("Application link must be an http or https link.")
         now = datetime.now(timezone.utc).replace(microsecond=0).isoformat()
         raw_interest = form.get("interest")
         if raw_interest is None or raw_interest == "":
@@ -134,6 +140,7 @@ def create_app(settings=None):
             "company": company[: LIMITS["company"]],
             "role": (form.get("role") or "").strip()[: LIMITS["role"]],
             "website": website[: LIMITS["website"]],
+            "posting_url": posting_url[: LIMITS["posting_url"]],
             "location": (form.get("location") or "").strip()[: LIMITS["location"]],
             "pay": (form.get("pay") or "").strip()[: LIMITS["pay"]],
             "status": status,
@@ -152,6 +159,7 @@ def create_app(settings=None):
             "company": "",
             "role": "",
             "website": "",
+            "posting_url": "",
             "location": "",
             "pay": "",
             "status": "To apply",
@@ -312,6 +320,7 @@ def create_app(settings=None):
                 "company",
                 "role",
                 "website",
+                "posting_url",
                 "location",
                 "pay",
                 "status",
@@ -409,7 +418,7 @@ def create_app(settings=None):
                     row for row in rows
                     if query in " ".join(
                         str(row.get(key, ""))
-                        for key in ("company", "role", "website", "location", "pay", "contact", "notes")
+                        for key in ("company", "role", "website", "posting_url", "location", "pay", "contact", "notes")
                     ).lower()
                 ]
             sort = request.args.get("sort", "").strip()
