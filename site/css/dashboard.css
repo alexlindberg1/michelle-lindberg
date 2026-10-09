@@ -312,6 +312,20 @@ td a { color: var(--green); }
   text-decoration: underline;
 }
 
+.app-link {
+  flex: none;
+  font-size: 0.85em;
+  text-decoration: none;
+}
+
+.company-cell a.app-link {
+  color: var(--green);
+}
+
+.company-cell a.app-link:hover {
+  color: var(--green-deep);
+}
+
 .sub {
   display: block;
   margin-top: 2px;
