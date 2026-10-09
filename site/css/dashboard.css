@@ -180,7 +180,8 @@ button.quiet {
   border: 1px solid var(--line);
 }
 
-.top-actions a.quiet {
+.top-actions a.quiet,
+.search a.quiet {
   display: inline-flex;
   align-items: center;
   height: 36px;
@@ -191,6 +192,35 @@ button.quiet {
   text-decoration: none;
   white-space: nowrap;
 }
+
+.search a.quiet { align-self: end; }
+
+tbody tr:hover { background: rgba(27, 67, 52, 0.04); }
+
+thead th {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  background: var(--paper);
+  box-shadow: 0 1px 0 var(--line);
+}
+
+.pill {
+  display: inline-block;
+  padding: 3px 10px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  font-size: 11px;
+  white-space: nowrap;
+}
+
+.pill-to-apply { color: var(--muted); }
+.pill-applied { color: var(--green); border-color: var(--green); background: rgba(27, 67, 52, 0.07); }
+.pill-responded { color: var(--copper); border-color: var(--copper); }
+.pill-interview { color: var(--paper); border-color: var(--copper); background: var(--copper); }
+.pill-offer { color: var(--paper); border-color: var(--green); background: var(--green); }
+.pill-rejected,
+.pill-withdrawn { color: var(--muted); }
 
 .danger button.quiet { color: var(--copper); }
 

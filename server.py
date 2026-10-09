@@ -415,17 +415,21 @@ def create_app(settings=None):
             summary = f"{len(rows)} saved"
             if bits:
                 summary = summary + ". " + " · ".join(bits)
+            matched = visible_rows(rows)
             table_rows = [
                 {**row, "favicon": favicon_for(row.get("website", ""))}
-                for row in visible_rows(rows)
+                for row in matched
             ]
+            query = request.args.get("q", "")
+            if query and len(matched) != len(rows):
+                summary = summary + f'. {len(matched)} matching "{query}"'
             return render_private(
                 "board.html",
                 rows=table_rows,
                 summary=summary,
                 draft=draft if draft is not None else blank(),
                 error=error,
-                query=request.args.get("q", ""),
+                query=query,
                 status_filter=status_filter,
             )
 
