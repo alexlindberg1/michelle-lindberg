@@ -266,13 +266,12 @@ table {
   min-width: 760px;
 }
 
-.c-company { width: 22%; }
+.c-company { width: 24%; }
 .c-interest { width: 11%; }
-.c-site { width: 4%; }
 .c-place { width: 15%; }
 .c-status { width: 11%; }
 .c-dates { width: 12%; }
-.c-details { width: 19%; }
+.c-details { width: 21%; }
 .c-edit { width: 6%; }
 
 caption, .sr {
@@ -302,22 +301,15 @@ th { color: var(--muted); font-weight: 400; padding-top: 10px; }
 
 td a { color: var(--green); }
 
-td.site { text-align: center; }
-
-a.ext {
-  display: inline-block;
-  min-width: 28px;
-  min-height: 28px;
-  line-height: 28px;
-  text-align: center;
-  color: var(--green);
+.company-cell a {
+  color: inherit;
   text-decoration: none;
-  border: 1px solid var(--line);
-  border-radius: 999px;
-  font-size: 15px;
 }
 
-a.ext:hover { border-color: var(--green); }
+.company-cell a:hover {
+  color: var(--green);
+  text-decoration: underline;
+}
 
 .sub {
   display: block;

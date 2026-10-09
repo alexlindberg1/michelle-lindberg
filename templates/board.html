@@ -53,7 +53,6 @@
     <colgroup>
       <col class="c-company">
       <col class="c-interest">
-      <col class="c-site">
       <col class="c-place">
       <col class="c-status">
       <col class="c-dates">
@@ -67,7 +66,6 @@
         {% endmacro %}
         <th>{{ sort_link('company', 'Company') }}</th>
         <th>{{ sort_link('interest', 'Interest') }}</th>
-        <th><span class="sr">Website</span></th>
         <th>{{ sort_link('place', 'Place') }}</th>
         <th>{{ sort_link('status', 'Status') }}</th>
         <th>{{ sort_link('dates', 'Dates') }}</th>
@@ -80,7 +78,7 @@
       {% for row in rows %}
       <tr>
         <td>
-          <span class="company-cell">{% if row.favicon %}<img class="favicon" src="{{ row.favicon }}" alt="" loading="lazy" width="16" height="16" onerror="this.remove()">{% endif %}<span>{{ row.company }}</span></span>
+          <span class="company-cell">{% if row.favicon %}<img class="favicon" src="{{ row.favicon }}" alt="" loading="lazy" width="16" height="16" onerror="this.remove()">{% endif %}{% if row.website %}<a href="{{ row.website }}" rel="noreferrer noopener" target="_blank">{{ row.company }}</a>{% else %}<span>{{ row.company }}</span>{% endif %}</span>
           {% if row.role %}<span class="sub">{{ row.role }}</span>{% endif %}
         </td>
         <td class="interest">
@@ -91,11 +89,6 @@
             <button type="submit" name="interest" value="{{ n }}" class="{% if score >= n %}is-on{% endif %}" aria-label="{{ n }} of 5 for {{ row.company }}" {% if score == n %}aria-pressed="true"{% else %}aria-pressed="false"{% endif %}>{% if score >= n %}★{% else %}☆{% endif %}</button>
             {% endfor %}
           </form>
-        </td>
-        <td class="site">
-          {% if row.website %}
-          <a class="ext" href="{{ row.website }}" rel="noreferrer noopener" target="_blank" aria-label="Open posting for {{ row.company }}">↗</a>
-          {% endif %}
         </td>
         <td>
           {{ row.location }}
@@ -120,7 +113,7 @@
       {% endfor %}
       {% else %}
       <tr>
-        <td class="empty" colspan="8">No applications in this view yet.</td>
+        <td class="empty" colspan="7">No applications in this view yet.</td>
       </tr>
       {% endif %}
     </tbody>
